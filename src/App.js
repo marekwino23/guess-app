@@ -3,10 +3,12 @@ import Words from './components/Words'
 import cogoToast from 'cogo-toast';
 import Place from "./components/Place"
 import {useState} from "react"
+import music from "../src/videoplayback.weba"
 
 function App() {
   const[phrase, setPhrase] = useState('');
   const[id,setId] = useState(0);
+  const[enter,setEnter] = useState(false)
   const[level,setLevel] = useState(0)
   const[status,setStatus] = useState("show description")
   const[description, setDescription] = useState('');
@@ -30,6 +32,10 @@ function App() {
     onValidate(e.target.value);
 }
 
+  const enterGame = () => {
+    setEnter(true)
+  }
+
 const onValidate = (value) => {
   let index = phrase.indexOf(value);
   if(index === -1){
@@ -37,8 +43,12 @@ const onValidate = (value) => {
       setWord( `bad words:  ${value}`)
       if(trials.length === 5){
           cogoToast.error(`Gameover, password is ${phrase}`);
-          setTrials([""]);
+          setTrials([]);
           setPhrase("");
+          setStatus("")
+          setWord("")
+          setSlots([])
+          setDescription("show sign")
       }
   }
   for(let i = 0; i< phrase.length + 1;i++){
@@ -56,6 +66,9 @@ const onValidate = (value) => {
 const exitGame = () => {
   setLevel(0)
   setPhrase("")
+  setEnter(false)
+  setTrials([])
+  setWord("")
   setStatus("show sign")
   setSlots([])
   setDescription("")
@@ -69,8 +82,10 @@ const onSuccess = () => {
   cogoToast.success(`Congratulation, you pass level ${level}`);
   setLevel(level + 1)
   setPhrase("")
+  setWord("")
   setStatus("show sign")
   setSlots([])
+  setTrials([])
   setDescription("")
   }
 }
@@ -79,9 +94,10 @@ const onSuccess = () => {
     <div className="App">
       <header className="App-header">
         <h1>Game level: {level}</h1>
-        <button onClick={exitGame} className="exit">Exit</button>
+        {enter === false ? <button className="new" onClick={enterGame}>New game</button>
+        :<div><audio autoPlay src={music}></audio><button onClick={exitGame} className="exit">Exit</button></div>}
       </header>
-      <Place
+      {enter === true ? <Place
       phrase={phrase}
       setPhrase={setPhrase}
       id={id}
@@ -89,8 +105,8 @@ const onSuccess = () => {
       slots={slots}
       setSlots={setSlots}
       phrases={phrases}
-      ></Place>
-      <div className="box">
+      ></Place>:<div></div>}
+      {enter === true ? <div className="box">
         <Words
          phrase={phrase}
          setPhrase={setPhrase}  
@@ -108,8 +124,8 @@ const onSuccess = () => {
          setStatus={setStatus}
          setTrials={setTrials}
          ></Words>
-      </div>
-      <div className="keyboard">
+      </div>:<div></div>}
+      {enter === true ? <div className="keyboard">
             <button onClick={onClick} value="q">q</button>
             <button onClick={onClick} value="w">w</button>
             <button onClick={onClick} value="e">e</button>
@@ -136,7 +152,7 @@ const onSuccess = () => {
             <button onClick={onClick} value="b">b</button>
             <button onClick={onClick} value="n">n</button>
             <button onClick={onClick} value="m">m</button>
-        </div>
+        </div>: <div></div>}
     </div>
   );
 }
