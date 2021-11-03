@@ -34,11 +34,16 @@ function App() {
 
   const enterGame = () => {
     setEnter(true)
+    console.log(slots)
+    cogoToast.info("Now you must click random password")
   }
 
 const onValidate = (value) => {
   let index = phrase.indexOf(value);
   if(index === -1){
+    cogoToast.warn("Remember you have only six trials to click wrong words",{
+      hideAfter:7
+    })
       setTrials([...trials, '|']);
       setWord( `bad words:  ${value}`)
       if(trials.length === 5){
@@ -48,7 +53,7 @@ const onValidate = (value) => {
           setStatus("")
           setWord("")
           setSlots([])
-          setDescription("show sign")
+          setStatus("show sign")
       }
   }
   for(let i = 0; i< phrase.length + 1;i++){
@@ -75,19 +80,22 @@ const exitGame = () => {
 }
 
 const onSuccess = () => {
-  if(level === 6){
-    cogoToast.success(`Congratulation, you done this game`);
+  if(phrase === slots.join("")){
+    if(level === 6){
+      cogoToast.success(`Congratulation, you done this game`);
+    }
+    else if(level<6){
+    cogoToast.success(`Congratulation, you pass level ${level}`);
+    setLevel(level + 1)
+    setPhrase("")
+    setWord("")
+    setStatus("show sign")
+    setSlots([])
+    setTrials([])
+    setDescription("")
+    }
   }
-  else if(level<6){
-  cogoToast.success(`Congratulation, you pass level ${level}`);
-  setLevel(level + 1)
-  setPhrase("")
-  setWord("")
-  setStatus("show sign")
-  setSlots([])
-  setTrials([])
-  setDescription("")
-  }
+  
 }
 
   return (
@@ -126,32 +134,32 @@ const onSuccess = () => {
          ></Words>
       </div>:<div></div>}
       {enter === true ? <div className="keyboard">
-            <button onClick={onClick} value="q">q</button>
-            <button onClick={onClick} value="w">w</button>
-            <button onClick={onClick} value="e">e</button>
-            <button onClick={onClick} value="r">r</button>
-            <button onClick={onClick} value="t">t</button>
-            <button onClick={onClick} value="y">y</button>
-            <button onClick={onClick} value="u">u</button>
-            <button onClick={onClick} value="i">i</button>
-            <button onClick={onClick} value="o">o</button>
-            <button onClick={onClick} value="p">p</button>
-            <button onClick={onClick} value="a">a</button>
-            <button onClick={onClick} value="s">s</button>
-            <button onClick={onClick} value="d">d</button>
-            <button onClick={onClick} value="f">f</button>
-            <button onClick={onClick} value="g">g</button>
-            <button onClick={onClick} value="h">h</button>
-            <button onClick={onClick} value="j">j</button>
-            <button onClick={onClick} value="k">k</button>
-            <button onClick={onClick} value="l">l</button>
-            <button onClick={onClick} value="z">z</button>
-            <button onClick={onClick} value="x">x</button>
-            <button onClick={onClick} value="c">c</button>
-            <button onClick={onClick} value="v">v</button>
-            <button onClick={onClick} value="b">b</button>
-            <button onClick={onClick} value="n">n</button>
-            <button onClick={onClick} value="m">m</button>
+            <button disabled={!slots.length} onClick={onClick} value="q">q</button>
+            <button disabled={!slots.length} onClick={onClick} value="w">w</button>
+            <button disabled={!slots.length} onClick={onClick} value="e">e</button>
+            <button disabled={!slots.length} onClick={onClick} value="r">r</button>
+            <button disabled={!slots.length} onClick={onClick} value="t">t</button>
+            <button disabled={!slots.length} onClick={onClick} value="y">y</button>
+            <button disabled={!slots.length} onClick={onClick} value="u">u</button>
+            <button disabled={!slots.length} onClick={onClick} value="i">i</button>
+            <button disabled={!slots.length} onClick={onClick} value="o">o</button>
+            <button disabled={!slots.length} onClick={onClick} value="p">p</button>
+            <button disabled={!slots.length} onClick={onClick} value="a">a</button>
+            <button disabled={!slots.length} onClick={onClick} value="s">s</button>
+            <button disabled={!slots.length} onClick={onClick} value="d">d</button>
+            <button disabled={!slots.length} onClick={onClick} value="f">f</button>
+            <button disabled={!slots.length} onClick={onClick} value="g">g</button>
+            <button disabled={!slots.length} onClick={onClick} value="h">h</button>
+            <button disabled={!slots.length} onClick={onClick} value="j">j</button>
+            <button disabled={!slots.length} onClick={onClick} value="k">k</button>
+            <button disabled={!slots.length} onClick={onClick} value="l">l</button>
+            <button disabled={!slots.length} onClick={onClick} value="z">z</button>
+            <button disabled={!slots.length} onClick={onClick} value="x">x</button>
+            <button disabled={!slots.length} onClick={onClick} value="c">c</button>
+            <button disabled={!slots.length} onClick={onClick} value="v">v</button>
+            <button disabled={!slots.length} onClick={onClick} value="b">b</button>
+            <button disabled={!slots.length} onClick={onClick} value="n">n</button>
+            <button disabled={!slots.length} onClick={onClick} value="m">m</button>
         </div>: <div></div>}
     </div>
   );
